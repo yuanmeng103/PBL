@@ -155,10 +155,20 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(os.path.dirname(current_dir), "3.png")
-with open(file_path, "rb") as f:
-    data = f.read()
-encoded = base64.b64encode(data).decode()
+
+# 2. 直接在当前文件夹下拼接文件名，不要向上跳一级
+file_path = os.path.join(current_dir, "3.png")
+
+# 3. 读取并编码
+if os.path.exists(file_path):
+    with open(file_path, "rb") as f:
+        data = f.read()
+    encoded = base64.b64encode(data).decode()
+else:
+    # 这样报错时你能直接在网页看到到底是哪个路径错了
+    import streamlit as st
+    st.error(f"找不到图片文件，请检查路径：{file_path}")
+为什么会出现这个误解？
 
 # --- 优雅布局 ---
 st.markdown(f"""
