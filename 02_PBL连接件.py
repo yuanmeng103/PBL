@@ -168,7 +168,6 @@ else:
     # 这样报错时你能直接在网页看到到底是哪个路径错了
     import streamlit as st
     st.error(f"找不到图片文件，请检查路径：{file_path}")
-为什么会出现这个误解？
 
 # --- 优雅布局 ---
 st.markdown(f"""
