@@ -60,13 +60,15 @@ def set_background(image_name):
 set_background("1.png")  # 这里写你的图片名
 
 def load_model(model_filename):
-    # 获取当前文件（即子页面 .py）的绝对路径
+    # 1. 获取当前脚本所在的文件夹（即根目录）
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    # 向上跳一级到根目录，然后进入 models 文件夹
-    model_path = os.path.join(os.path.dirname(current_dir), "models", model_filename)
+    
+    # 2. 直接在当前文件夹下找模型文件
+    model_path = os.path.join(current_dir, model_filename)
     
     if not os.path.exists(model_path):
-        raise FileNotFoundError(f"{model_path} 不存在")
+        # 调试用：如果报错，它会告诉你它实际在哪个路径找，方便你排查
+        raise FileNotFoundError(f"未找到模型文件！程序尝试访问的具体路径为: {model_path}")
     
     model = xgb.XGBRegressor()
     model.load_model(model_path)
