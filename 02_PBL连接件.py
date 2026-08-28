@@ -172,8 +172,8 @@ st.markdown(f"""
 ">
     <div style="flex: 1; font-size: 26px; line-height: 1.8; text-align: justify; color: #333;">
         基于机器学习算法（XGBoost），结合482个推出试验和插入试验的数据库，
-        部署为在线预测平台。平台已扩展支持<b>分位数回归输出模式</b>[cite: 2]，
-        可实现从“点估计工具”到“全概率设计助手”的功能升级[cite: 2]。
+        部署为在线预测平台。平台已扩展支持<b>分位数回归输出模式</b>，
+        可实现从“点估计工具”到“全概率设计助手”的功能升级。
         （注：试验类型：0-推出试验，1-插入试验；端部是否承压：0-端部不承压，1-端部承压。无贯穿钢筋时，<i>d</i><sub>s</sub> 和 <i>f</i><sub>sy</sub> 取 0）
     </div>
     <div style="flex: 0 0 400px; margin-left: 40px;">
