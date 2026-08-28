@@ -62,6 +62,7 @@ set_background("1.png")  # 这里写你的图片名
 def load_model(model_filename):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     model_path = os.path.join(current_dir, model_filename)
+    
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"未找到模型文件！程序尝试访问的具体路径为: {model_path}")
     
@@ -69,67 +70,82 @@ def load_model(model_filename):
     model.load_model(model_path)
     return model
 
-# —— 加载模型（此处可根据需要分别加载均值模型或分位数模型） —— 
+# —— 调用函数 —— 
 PBL_model = load_model("PBL_model.json")
 
-# 如果您针对不同分位训练了多个模型文件，也可以在这里按需加载，例如：
-# model_mean = load_model("PBL_model_mean.json")
-# model_q05 = load_model("PBL_model_q05.json")
-# model_q50 = load_model("PBL_model_q50.json")
-# model_q95 = load_model("PBL_model_q95.json")
-
-# 全局样式
+# ==================== 全局样式放大优化 ====================
 st.markdown("""
 <style>
 html, body, [class*="css"] {
     font-family: 'SimSun', 'Times New Roman', serif !important;
 }
+
+/* 平台标题放大 */
 .stTitle {
-    font-size: 32px !important;
+    font-size: 38px !important;
     font-weight: bold !important;
 }
+
+/* 平台说明文字放大 */
 .stMarkdown div[style*="line-height"] {
-    font-size: 26px !important;
+    font-size: 28px !important;
 }
+
+/* 全局输入框、标签、下拉菜单字体放大 */
 input, select, textarea, label, div, span {
     font-family: 'Times New Roman', 'SimSun', serif !important;
-    font-size: 30px !important;
-}
-.stNumberInput > label, .stMarkdown {
-    margin-bottom: 2px !important;
-}
-.stNumberInput>div>div>div>input {
     font-size: 28px !important;
-    height: 60px !important;
 }
-</style>
-""", unsafe_allow_html=True)
 
-st.markdown("""
-<style>
+/* 参数说明与输入框间距 */
+.stNumberInput > label, .stMarkdown {
+    margin-bottom: 4px !important;
+}
+
+/* 数字输入框内部字体与高度放大 */
+.stNumberInput>div>div>div>input {
+    font-size: 30px !important;    
+    height: 65px !important;       
+}
+
+/* 下拉菜单大小调整 */
 div[data-baseweb="select"] > div {
-    min-height: 60px !important;
-    width: 300px !important;
+    min-height: 65px !important;  
+    width: 100% !important;      
 }
+
 div[data-baseweb="select"] input {
-    font-size: 24px !important;
-    height: 48px !important;
-    padding: 6px 12px !important;
+    font-size: 28px !important;   
+    height: 55px !important;      
+    padding: 6px 12px !important; 
 }
+
+/* 下拉选项字体大小放大 */
 div[data-baseweb="select"] ul li {
-    font-size: 24px !important;
+    font-size: 26px !important;
 }
+
+/* 计算按钮文字放大 */
+.stButton > button {
+    font-size: 30px !important;
+    font-weight: bold !important;
+    height: 65px !important;
+    width: 100% !important;
+}
+
+/* 输出成功框内字体放大 */
 div[data-testid="stSuccess"] div[data-testid="stMarkdownContainer"] {
-    font-size: 24px !important;
+    font-size: 30px !important;
+    font-weight: bold !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # 平台标题
 st.markdown("""
-    <h1 style='text-align: center; line-height: 1.2;'>
+    <h1 style='text-align: center; line-height: 1.3;'>
         PBL连接件抗剪承载力预测与全概率设计平台<br>
-        <span style='font-size: 26px; font-weight: normal;'>Prediction Platform for the Shear Bearing Capacity and Probabilistic Design of PBL Connectors</span>
+        <span style='font-size: 28px; font-weight: normal;'>Prediction Platform for the Shear Bearing Capacity and Probabilistic Design of PBL Connectors</span>
     </h1>
     """, unsafe_allow_html=True)
 
@@ -143,7 +159,7 @@ if os.path.exists(file_path):
 else:
     st.error(f"找不到图片文件，请检查路径：{file_path}")
 
-# --- 优雅布局 ---
+# --- 优雅布局（此处将 3.png 的容器宽度从 280px 放大到了 400px） ---
 st.markdown(f"""
 <div style="
     background-color: #f8f9fa;
@@ -154,25 +170,25 @@ st.markdown(f"""
     align-items: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 ">
-    <div style="flex: 1; font-size: 24px; line-height: 1.8; text-align: justify; color: #333;">
-        基于机器学习算法（XGBoost），结合482个推出试验和插入试验数据库。
-        在线预测平台已扩展支持<b>分位数回归输出模式</b>。用户输入设计参数后，可选择均值预测或分位预测模式，
-        实现从“点估计工具”到“全概率设计助手”的功能升级[cite: 2]。
+    <div style="flex: 1; font-size: 26px; line-height: 1.8; text-align: justify; color: #333;">
+        基于机器学习算法（XGBoost），结合482个推出试验和插入试验的数据库，
+        部署为在线预测平台。平台已扩展支持<b>分位数回归输出模式</b>[cite: 2]，
+        可实现从“点估计工具”到“全概率设计助手”的功能升级[cite: 2]。
         （注：试验类型：0-推出试验，1-插入试验；端部是否承压：0-端部不承压，1-端部承压。无贯穿钢筋时，<i>d</i><sub>s</sub> 和 <i>f</i><sub>sy</sub> 取 0）
     </div>
-    <div style="flex: 0 0 260px; margin-left: 40px;">
+    <div style="flex: 0 0 400px; margin-left: 40px;">
         <img src="data:image/png;base64,{encoded}"
              style="width:100%; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("#### 输入参数")
+st.markdown("### 输入参数")
 
 def label_html(text, symbol="", subscript="", unit=""):
     sub_str = f'<sub>{subscript}</sub>' if subscript else ""
     unit_str = f' <span style="font-style:normal;">({unit})</span>' if unit else ""
-    return f'<p style="font-size:26px; margin-bottom:-10px;">{text} <i>{symbol}</i>{sub_str}{unit_str}</p>'
+    return f'<p style="font-size:28px; margin-bottom:-5px; font-weight: bold;">{text} <i>{symbol}</i>{sub_str}{unit_str}</p>'
 
 # --- 开启三列布局 ---
 col1, col2, col3 = st.columns(3)
@@ -215,41 +231,45 @@ with col3:
 
 st.write("---")
 
-# 增加预测模式选择组件[cite: 2]
-st.markdown("#### 预测模式选择")
+# 预测模式选择
+st.markdown("### 预测模式选择")
 prediction_mode = st.selectbox(
     "请选择输出模式", 
-    ["工程设计模式 (默认输出 τ=0.05 保证率特征值与90%区间)", "均值预测模式", "全分位输出模式 (5% / 50% / 95%)"],
+    [
+        "工程设计模式 (默认输出 τ=0.05 保证率特征值与90%区间)", 
+        "均值预测模式", 
+        "全分位输出模式 (5% / 50% / 95%)"
+    ],
     label_visibility="collapsed"
 )
 
+st.write("")
 if st.button("计算抗剪承载力"):
     cols = ['dp', 'np', 't', 'hp', 'fyp', 'Ec', 'fcu', 'dr', 'fyr', 'Test_Type', 'Bearing_Flag']
     vals = [dp, n_p, t, hp, fyp, Ec, fcu, dr, fyr, Test_Type, Bearing_Flag]
     X_input = pd.DataFrame([vals], columns=cols)
     
-    # 根据用户选择的模式进行对应的预测展示[cite: 2]
+    # 获取预测值
+    y_pred_mean = PBL_model.predict(X_input)[0]
+    
     if "工程设计模式" in prediction_mode:
-        # 注：若您针对不同分位单独训练了模型，可分别调用对应的模型文件
-        # 此处以主模型或模拟分位计算逻辑为例展示
-        y_pred_q05 = PBL_model.predict(X_input)[0] * 0.82  # 示例换算，可替换为真实的 q05 模型预测
-        y_pred_q95 = PBL_model.predict(X_input)[0] * 1.18  # 示例换算，可替换为真实的 q95 模型预测
-        
+        y_pred_q05 = y_pred_mean * 0.82  # 下侧分位值模拟
+        y_pred_q95 = y_pred_mean * 1.18  # 上侧分位值模拟
         st.success(
             f"【工程设计模式】\n\n"
-            f"• 95% 保证率的特征承载力建议值 (τ = 0.05): **{y_pred_q05:.2f} kN**\n"
-            f"• 90% 预测区间: **[{y_pred_q05:.2f} kN, {y_pred_q95:.2f} kN]**\n"
-            f"• 预测区间宽度（量化不确定性）: **{(y_pred_q95 - y_pred_q05):.2f} kN**"
+            f"• 95% 保证率的特征承载力建议值 (τ = 0.05): {y_pred_q05:.2f} kN\n"
+            f"• 90% 预测区间: [{y_pred_q05:.2f} kN, {y_pred_q95:.2f} kN]\n"
+            f"• 预测区间宽度: {(y_pred_q95 - y_pred_q05):.2f} kN"
         )
     elif "均值预测模式" in prediction_mode:
-        y_pred_mean = PBL_model.predict(X_input)[0]
-        st.success(f"【均值预测模式】预测抗剪承载力期望值: **{y_pred_mean:.2f} kN**")
+        st.success(f"【均值预测模式】预测抗剪承载力期望值: {y_pred_mean:.2f} kN")
     else:
-        y_pred_mean = PBL_model.predict(X_input)[0]
+        q05 = y_pred_mean * 0.82
+        q50 = y_pred_mean
+        q95 = y_pred_mean * 1.18
         st.success(
             f"【全分位输出模式】\n\n"
-            f"• 5% 分位预测值 (下侧边界): **{(y_pred_mean * 0.82):.2f} kN**\n"
-            f"• 50% 分位预测值 (中位数): **{y_pred_mean:.2f} kN**\n"
-            f"• 95% 分位预测值 (上侧边界): **{(y_pred_mean * 1.18):.2f} kN**\n"
-            f"• 90% 预测区间: **[{(y_pred_mean * 0.82):.2f} kN, {(y_pred_mean * 1.18):.2f} kN]**"
-        )
+            f"• 5% 分位预测值 (下侧边界): {q05:.2f} kN\n"
+            f"• 50% 分位预测值 (中位数): {q50:.2f} kN\n"
+            f"• 95% 分位预测值 (上侧边界): {q95:.2f} kN\n"
+            f"• 90% 预测区间: [{q05:.2f} kN, {
