@@ -57,7 +57,7 @@ def set_background(image_name):
     )
 
 # ---------------- 调用背景图 ----------------
-set_background("1.png")  # 这里写你的图片名
+set_background("2.png")  # 这里写你的图片名
 
 def load_model(model_filename):
     current_dir = os.path.dirname(os.path.abspath(__file__))
